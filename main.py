@@ -1,17 +1,22 @@
-from data import question_data
 from question_model import Question
+from data import question_data
 from quiz_brain import QuizBrain
+from ui import QuizInterface
 
-# Creating a list of Question objects
-question_bank = [Question(q["question"], q["correct_answer"]) for q in question_data]
 
-# Initializing the quiz
-quiz_1 = QuizBrain(question_bank)
+def create_question_bank(data: list[dict]) -> list[Question]:
+    return [Question(q["question"], q["correct_answer"]) for q in data]
 
-# Running the quiz until no questions remain
-while quiz_1.still_has_questions():
-    quiz_1.next_question()
 
-# Display final score
-print("You have completed the quiz!")
-print(f"Your total score is: {quiz_1.score}/{quiz_1.question_no}")
+def main():
+    question_bank = create_question_bank(question_data)
+    quiz = QuizBrain(question_bank)
+    QuizInterface(quiz)  # GUI handles mainloop and quiz progression
+
+    # Final score display (optional for CLI fallback)
+    print("You've completed the quiz")
+    print(f"Your final score was: {quiz.score}/{quiz.question_number}")
+
+
+if __name__ == "__main__":
+    main()
